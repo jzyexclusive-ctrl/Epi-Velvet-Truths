@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Truth or Dare</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Jost:wght@300;400;500;600&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Confetti canvas (fullscreen, pointer-events:none) -->
+  <canvas id="cvc"></canvas>
+
+  <!-- Toolbar: sound + theme -->
+  <div class="toolbar">
+    <button class="tool-btn" id="snd-btn" title="Sound">&#9834;</button>
+    <button class="tool-btn" id="thm-btn" title="Theme">&#9788;</button>
+  </div>
+
+  <div id="app">
+
+    <!-- ══════════════════════════════════════
+         HOME SCREEN
+    ══════════════════════════════════════ -->
+    <div class="screen active" id="s-home">
+
+      <div class="masthead">
+        <span class="eyebrow">A Classic Party Game</span>
+        <div class="logo">Truth<br /><em>or</em> Dare</div>
+        <span class="tagline">Est. for Good Company &nbsp;&#9670;</span>
+      </div>
+
+      <div class="ornament">
+        <div class="orn-line"></div>
+        <span class="orn-sym">&#10022; &#10022; &#10022;</span>
+        <div class="orn-line"></div>
+      </div>
+
+      <!-- Game Mode -->
+      <div class="card">
+        <div class="card-head">
+          <span class="card-head-lbl">Game Mode</span>
+          <span class="card-head-r">Choose one</span>
+        </div>
+        <div class="card-body">
+          <div class="modes-grid">
+            <button class="mode-btn sel" data-mode="classic">
+              <span class="m-icon">&#9670;</span>
+              <span class="m-name">Classic</span>
+              <span class="m-desc">Timeless and balanced. The original.</span>
+            </button>
+            <button class="mode-btn" data-mode="friends">
+              <span class="m-icon">&#9786;</span>
+              <span class="m-name">Friends</span>
+              <span class="m-desc">Warm and funny. For close company.</span>
+            </button>
+            <button class="mode-btn" data-mode="spicy">
+              <span class="m-icon">&#9733;</span>
+              <span class="m-name">Spicy</span>
+              <span class="m-desc">Bold dares and wild questions.</span>
+            </button>
+            <button class="mode-btn" data-mode="deep">
+              <span class="m-icon">&#9675;</span>
+              <span class="m-name">Deep Talk</span>
+              <span class="m-desc">Thoughtful, for real conversation.</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- How to Play -->
+      <div class="card">
+        <div class="card-head">
+          <span class="card-head-lbl">How to Play</span>
+        </div>
+        <div class="card-body">
+          <div class="room-method-row">
+            <button class="method-btn" id="local-btn">
+              <span class="method-icon">&#9670;</span>
+              <span class="method-lbl">Local</span>
+              <span class="method-sub">One device, pass and play</span>
+            </button>
+            <button class="method-btn" id="online-btn">
+              <span class="method-icon">&#9786;</span>
+              <span class="method-lbl">Online</span>
+              <span class="method-sub">Multiple devices, one room</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /#s-home -->
+
+
+    <!-- ══════════════════════════════════════
+         LOCAL SETUP SCREEN
+    ══════════════════════════════════════ -->
+    <div class="screen" id="s-local">
+
+      <div class="masthead">
+        <span class="eyebrow">Local Game</span>
+        <div class="logo logo--sm">Setup</div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-head-lbl">Players</span>
+        </div>
+        <div class="card-body card-body--gap">
+
+          <div>
+            <div class="s-label">Number of Players</div>
+            <div class="count-grid" id="local-count-grid">
+              <button class="count-btn" data-n="2">2</button>
+              <button class="count-btn sel" data-n="3">3</button>
+              <button class="count-btn" data-n="4">4</button>
+              <button class="count-btn" data-n="5">5</button>
+              <button class="count-btn" data-n="6">6</button>
+              <button class="count-btn" data-n="7">7</button>
+              <button class="count-btn" data-n="8">8</button>
+            </div>
+          </div>
+
+          <div>
+            <div class="s-label">Names</div>
+            <div class="names-list" id="local-names"></div>
+          </div>
+
+        </div>
+      </div>
+
+      <button class="btn-prim" id="local-start-btn">Begin the Game</button>
+      <button class="btn-sec" id="local-back-btn">&#8592; Back</button>
+
+    </div><!-- /#s-local -->
+
+
+    <!-- ══════════════════════════════════════
+         ONLINE LOBBY SCREEN
+    ══════════════════════════════════════ -->
+    <div class="screen" id="s-online">
+
+      <div class="masthead">
+        <span class="eyebrow">Online Room</span>
+        <div class="logo logo--sm">Connect</div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-head-lbl">Join or Host</span>
+        </div>
+        <div class="card-body card-body--gap">
+
+          <div>
+            <div class="s-label">Your Name</div>
+            <div class="name-row">
+              <span class="name-num">&#9670;</span>
+              <input class="name-inp" id="online-myname" type="text" maxlength="18" placeholder="Enter your name" />
+            </div>
+          </div>
+
+          <div class="ornament">
+            <div class="orn-line"></div>
+            <span class="orn-sym">&#10022;</span>
+            <div class="orn-line"></div>
+          </div>
+
+          <div>
+            <div class="s-label">Host a New Room</div>
+            <button class="btn-prim" id="host-btn">Create Room</button>
+          </div>
+
+          <div class="ornament">
+            <div class="orn-line"></div>
+            <span class="orn-sym">&#10022;</span>
+            <div class="orn-line"></div>
+          </div>
+
+          <div>
+            <div class="s-label">Join an Existing Room</div>
+            <input class="join-code-inp" id="join-code-inp" type="text" maxlength="6" placeholder="Room Code" autocomplete="off" />
+            <div class="mt-10">
+              <button class="btn-sec btn-full" id="join-btn">Join Room</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div id="online-status" class="status-banner" style="display:none;">
+        <span class="status-dot"></span>
+        <span class="status-txt" id="online-status-txt"></span>
+      </div>
+
+      <button class="btn-sec" id="online-back-btn">&#8592; Back</button>
+
+    </div><!-- /#s-online -->
+
+
+    <!-- ══════════════════════════════════════
+         WAITING ROOM SCREEN
+    ══════════════════════════════════════ -->
+    <div class="screen" id="s-waiting">
+
+      <div class="masthead">
+        <span class="eyebrow">Waiting Room</span>
+        <div class="logo logo--sm">Room <em id="wr-code-display">????</em></div>
+      </div>
+
+      <div class="ornament">
+        <div class="orn-line"></div>
+        <span class="orn-sym">&#10022; &#10022; &#10022;</span>
+        <div class="orn-line"></div>
+      </div>
+
+      <!-- Code + QR -->
+      <div class="card">
+        <div class="card-head">
+          <span class="card-head-lbl">Share this Code</span>
+          <span class="card-head-r card-head-action" id="wr-copy-btn">Copy</span>
+        </div>
+        <div class="card-body card-body--code">
+          <div class="room-code-display" id="wr-code-big">&#8212;</div>
+          <div class="copy-hint">Share this code with your friends to join</div>
+          <div class="qr-wrap">
+            <div class="qr-box">
+              <canvas id="qr-canvas" width="130" height="130"></canvas>
+            </div>
+            <span class="qr-label">Scan to join</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Player list -->
+      <div class="card">
+        <div class="card-head">
+          <span class="card-head-lbl">Players in Room</span>
+          <span class="card-head-r" id="wr-count">0 / 8</span>
+        </div>
+        <div class="card-body">
+          <div class="waiting-list" id="waiting-list"></div>
+        </div>
+      </div>
+
+      <!-- Host controls -->
+      <div id="wr-host-controls" class="wr-host-controls" style="display:none;">
+        <button class="btn-prim" id="wr-start-btn" disabled>Waiting for Players&#8230;</button>
+        <button class="btn-sec" id="wr-cancel-btn">Cancel Room</button>
+      </div>
+
+      <!-- Guest message -->
+      <div id="wr-guest-msg" style="display:none;">
+        <div class="status-banner ok">
+          <span class="status-dot"></span>
+          <span class="status-txt">Waiting for the host to start the game&hellip;</span>
+        </div>
+      </div>
+
+    </div><!-- /#s-waiting -->
+
+
+    <!-- ══════════════════════════════════════
+         GAME SCREEN
+    ══════════════════════════════════════ -->
+    <div class="screen" id="s-game">
+
+      <div class="game-topbar">
+        <span class="mode-pill" id="mode-pill">Classic</span>
+        <span class="round-lbl">Round <span id="r-num">1</span></span>
+      </div>
+
+      <div class="progress-track">
+        <div class="progress-fill" id="prog" style="width:0%"></div>
+      </div>
+
+      <div class="player-stage">
+        <div class="stage-lbl">Now Playing</div>
+        <div class="stage-name" id="p-name">&#8212;</div>
+        <div class="stage-sub" id="p-sub">Choose your fate</div>
+      </div>
+
+      <!-- Online-only indicators -->
+      <div id="your-turn-banner" class="your-turn-banner" style="display:none;">
+        &#9670;&nbsp; It is your turn &nbsp;&#9670;
+      </div>
+      <div id="spectator-msg" class="spectator-msg" style="display:none;">
+        Sit back and watch &#8212; it is not your turn yet.
+      </div>
+
+      <div class="ornament">
+        <div class="orn-line"></div>
+        <span class="orn-sym">&#10022;</span>
+        <div class="orn-line"></div>
+      </div>
+
+      <!-- Truth / Dare buttons -->
+      <div class="choice-pair">
+        <button class="btn-choice btn-truth" id="truth-btn">
+          <span class="ch-icon">&#9788;</span>
+          <span class="ch-lbl">Truth</span>
+          <span class="ch-sub">Speak honestly</span>
+        </button>
+        <button class="btn-choice btn-dare" id="dare-btn">
+          <span class="ch-icon">&#9733;</span>
+          <span class="ch-lbl">Dare</span>
+          <span class="ch-sub">Accept the challenge</span>
+        </button>
+      </div>
+
+      <!-- Question card -->
+      <div class="q-wrap">
+        <div class="q-empty" id="q-empty">
+          <span class="q-empty-sym">&#9670;</span>
+          <span class="q-empty-txt">Select Truth or Dare to reveal your prompt</span>
+        </div>
+        <div class="q-card" id="q-card">
+          <span class="q-badge" id="q-badge">Truth</span>
+          <p class="q-text" id="q-text"></p>
+          <div class="q-rule"></div>
+          <div class="q-footer">&rdquo;</div>
+        </div>
+      </div>
+
+      <!-- Actions (shown after a question is picked) -->
+      <div class="act-row" id="act-row" style="display:none;">
+        <button class="btn-prim" id="next-btn">Next Player &rarr;</button>
+        <button class="btn-sec" id="end-btn1">End Game</button>
+      </div>
+
+      <!-- End button visible before a question is picked -->
+      <div id="solo-end">
+        <button class="btn-sec btn-full" id="end-btn2">End Game</button>
+      </div>
+
+    </div><!-- /#s-game -->
+
+
+    <!-- ══════════════════════════════════════
+         END SCREEN
+    ══════════════════════════════════════ -->
+    <div class="screen" id="s-end">
+
+      <span class="end-icon">&#9670;</span>
+      <div class="end-hl">Well Played,<br />Everyone.</div>
+      <div class="end-sub">Another evening well spent.</div>
+
+      <div class="ornament">
+        <div class="orn-line"></div>
+        <span class="orn-sym">&#10022; &#10022; &#10022;</span>
+        <div class="orn-line"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-head-lbl">Tonight&#39;s Company</span>
+        </div>
+        <div class="card-body">
+          <div class="roster" id="roster"></div>
+        </div>
+      </div>
+
+      <button class="btn-prim" id="again-btn">Play Again</button>
+      <button class="btn-sec btn-full" id="settings-btn">Change Settings</button>
+
+    </div><!-- /#s-end -->
+
+  </div><!-- /#app -->
+
+  <script src="game.js" defer></script>
+</body>
+</html>
