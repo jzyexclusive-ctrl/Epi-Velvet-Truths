@@ -52,13 +52,13 @@ function genCode(){const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let c='';for(l
 //  ONLINE — STORAGE (shared=true via window.storage)
 // ══════════════════════════════════════
 async function saveRoom(state){
-  try{await window.storage.set(roomKey(state.code),JSON.stringify(state),true);}catch(e){console.error('saveRoom',e);}
+  try{localStorage.setItem(roomKey(state.code),JSON.stringify(state));}catch(e){console.error('saveRoom',e);}
 }
 async function loadRoom(code){
-  try{const r=await window.storage.get(roomKey(code),true);return r?JSON.parse(r.value):null;}catch(e){return null;}
+  try{const r=localStorage.getItem(roomKey(code));return r?JSON.parse(r):null;}catch(e){return null;}
 }
 async function deleteRoom(code){
-  try{await window.storage.delete(roomKey(code),true);}catch(e){}
+  try{localStorage.removeItem(roomKey(code));}catch(e){}
 }
 
 // ══════════════════════════════════════
@@ -85,12 +85,15 @@ function enterWaitingRoom(state){
   document.getElementById('wr-code-display').textContent=state.code;
   drawSimpleQR(state.code);
   updateWaitingList(state.players);
+  const hc=document.getElementById('wr-host-controls');
+  const gm=document.getElementById('wr-guest-msg');
   if(isHost){
-    document.getElementById('wr-host-controls').style.display='flex';
-    document.getElementById('wr-guest-msg').style.display='none';
+    hc.style.display='flex';
+    hc.style.flexDirection='column';
+    gm.style.display='none';
   } else {
-    document.getElementById('wr-host-controls').style.display='none';
-    document.getElementById('wr-guest-msg').style.display='block';
+    hc.style.display='none';
+    gm.style.display='block';
   }
   showScreen('s-waiting');
   startPolling();
@@ -145,7 +148,7 @@ function stopPolling(){if(pollTimer){clearInterval(pollTimer);pollTimer=null;}}
 
 async function poll(){
   const state=await loadRoom(roomCode);
-  if(!state){stopPolling();showScreen('s-home');return;}
+  if(!state) return; // ignore transient failures, don't close the screen
   if(state.status==='waiting') updateWaitingList(state.players);
   else if(state.status==='playing') applyOnlineGameState(state);
   else if(state.status==='ended'){stopPolling();applyEndState(state);}
